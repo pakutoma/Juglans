@@ -13,13 +13,10 @@
 # ・英数字記号は、Inconsolata
 # ・他の文字は、源真ゴシック
 # ・一部の文字を視認性向上のために migu の特徴を取込み
-#     半濁点（ぱぴぷぺぽパピプペポ の右上の円）を大きくして、濁点と判別しやすく
-#     「カ力 エ工 ロ口 ー一 ニ二」（カタカナ・漢字）の区別
 #     ～〜（FULLWIDTH TILDE・WAVE DASH）の区別
-#     ー一－（カタカナ・漢字・マイナス）の区別
 
 # version
-newfont_version = "2.012.20180119"
+newfont_version = "1.000.20210404"
 newfont_sfntRevision = 0x00010000
 
 # set font name
@@ -242,7 +239,6 @@ def setFontProp(font, fontInfo):
     font.weight = "Book"
     font.copyright = "Copyright (c) 2015 Tomokuni SEKIYA (Myrica)\n"
     font.copyright += "Copyright (c) 2006-2012 Raph Levien (Inconsolata)\n"
-    font.copyright += "Copyright (c) 2013 itouhiro (Migu)\n"
     font.copyright += "Copyright (c) 2014 MM (GenShinGothic)\n"
     font.copyright += "Copyright (c) 2014 Adobe Systems Incorporated. (NotoSansJP)\n"
     font.copyright += "Licenses:\n"
@@ -311,18 +307,18 @@ fIn = fontforge.open(srcfontIncosolata)
 # modify
 print("modify")
 # 拡大 "'`
-select(fIn, 0x0022, 0x0027, 0x0060)
-fIn.transform(matRescale(250, 600, 1.15, 1.15))
-setWidth(fIn, 1000 / 2)
-
+# select(fIn, 0x0022, 0x0027, 0x0060)
+# fIn.transform(matRescale(250, 600, 1.15, 1.15))
+# setWidth(fIn, 1000 / 2)
+#
 # 拡大 ,.:;
-select(fIn, 0x002c, 0x002e, 0x003a, 0x003b)
-fIn.transform(matRescale(250, 0, 1.20, 1.20))
-setWidth(fIn, 1000 / 2)
+# select(fIn, 0x002c, 0x002e, 0x003a, 0x003b)
+# fIn.transform(matRescale(250, 0, 1.20, 1.20))
+# setWidth(fIn, 1000 / 2)
 
 # 移動 ~
-select(fIn, 0x007e)
-fIn.transform(matMove(0, 120))
+# select(fIn, 0x007e)
+# fIn.transform(matMove(0, 120))
 
 # 移動 ()
 select(fIn, list(u"()"))
@@ -347,7 +343,8 @@ copyAndPaste(fIn, 0x0110, fIn, 0x0044)
 # r -> r of serif (Inconsolata's unused glyph)
 copyAndPaste(fIn, 65548, fIn, 0x0072)
 
-removeHintAndInstr(fIn, 0x0022, 0x0027, 0x0060, list(u"\"'`,.:;()~[]{}|"))
+# removeHintAndInstr(fIn, 0x0022, 0x0027, 0x0060, list(u"\"'`,.:;()~[]{}|"))
+removeHintAndInstr(fIn, list(u"()[]{}|"))
 
 # modify em
 fIn.em = newfont_em
@@ -357,7 +354,7 @@ fIn.descent = newfont_descent
 # 文字の置換え
 print("merge ReplaceParts")
 for glyph in fRp.glyphs():
-    if glyph.unicode > 0:
+    if glyph.unicode in (0x002a, 0x002d): # ASTERISK, HYPHEN-MINUS
         select(fRp, glyph.glyphname)
         fRp.copy()
         select(fIn, glyph.glyphname)
@@ -393,7 +390,7 @@ fGs.descent = newfont_descent
 # 文字の置換え
 print("merge ReplaceParts")
 for glyph in fRp.glyphs():
-    if glyph.unicode > 0:
+    if glyph.unicode in (0x2013, 0x2014, 0x301c): # EN DASH, EM DASH, WAVE DASH
         select(fRp, glyph.glyphname)
         fRp.copy()
         select(fGs, glyph.glyphname)
