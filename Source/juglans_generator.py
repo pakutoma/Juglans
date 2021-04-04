@@ -16,7 +16,7 @@
 #     ～〜（FULLWIDTH TILDE・WAVE DASH）の区別
 
 # version
-newfont_version = "1.000.20210404"
+newfont_version = "1.001.20210405"
 newfont_sfntRevision = 0x00010000
 
 # set font name
@@ -362,6 +362,7 @@ for glyph in fRp.glyphs():
 
 # 必要文字(半角英数字記号)だけを残して削除
 select(fIn, rng(0x0021, 0x007E))
+selectMore(fIn, 0x00B7) # MIDDLE DOT
 fIn.selection.invert()
 fIn.clear()
 
