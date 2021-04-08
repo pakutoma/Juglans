@@ -16,7 +16,7 @@
 #     ～〜（FULLWIDTH TILDE・WAVE DASH）の区別
 
 # version
-newfont_version = "1.002.20210408"
+newfont_version = "1.003.20210408"
 newfont_sfntRevision = 0x00010000
 
 # set font name
@@ -318,7 +318,7 @@ print("modify")
 
 # 移動 ~
 select(fIn, 0x007e)
-fIn.transform(matMove(0, 120))
+fIn.transform(matMove(0, -88))
 
 # 移動 ()
 select(fIn, list(u"()"))
