@@ -3,7 +3,7 @@
 
 #
 # Author: Tomokuni SEKIYA
-# Modified by: Tairi Chiba
+# Modified by: pakutoma
 #
 # This script is for generating ``juglans'' font
 #
@@ -17,7 +17,7 @@
 #     ～〜（FULLWIDTH TILDE・WAVE DASH）の区別
 
 # version
-newfont_version = "1.003.20210408"
+newfont_version = "1.004.20210413"
 newfont_sfntRevision = 0x00010000
 
 # set font name
@@ -238,7 +238,8 @@ def setFontProp(font, fontInfo):
     font.familyname = fontInfo[2]
     font.fullname = fontInfo[3]
     font.weight = "Book"
-    font.copyright = "Copyright (c) 2015 Tomokuni SEKIYA (Myrica)\n"
+    font.copyright = "Copyright (c) 2021 pakutoma (Juglans)\n"
+    font.copyright += "Copyright (c) 2014 Tomokuni SEKIYA (Myrica)\n"
     font.copyright += "Copyright (c) 2006-2012 Raph Levien (Inconsolata)\n"
     font.copyright += "Copyright (c) 2014 MM (GenShinGothic)\n"
     font.copyright += "Copyright (c) 2014 Adobe Systems Incorporated. (NotoSansJP)\n"
