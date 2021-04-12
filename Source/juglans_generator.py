@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 #
-# Author: pakutoma
+# Author: Tomokuni SEKIYA
+# Modified by: Tairi Chiba
 #
 # This script is for generating ``juglans'' font
 #
