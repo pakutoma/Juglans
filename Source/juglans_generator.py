@@ -27,7 +27,7 @@ newfontN = ("../Work/JuglansN.ttf", "JuglansN", "Juglans N", "Juglans Narrow")
 
 # source file
 srcfontIncosolata = "../SourceTTF/Inconsolata-Regular.ttf"
-srcfontGenShin = "../SourceTTF/GenShinGothic-Monospace-Light.ttf"
+srcfontGenShin = "../SourceTTF/GenShinGothic-Monospace-Normal.ttf"
 srcfontMyricaReplaceParts = "../SourceTTF/myrica_ReplaceParts.ttf"
 
 # out file
