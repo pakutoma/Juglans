@@ -240,7 +240,7 @@ def setFontProp(font, fontInfo):
     font.weight = "Book"
     font.copyright = "Copyright (c) 2021 pakutoma (Juglans)\n"
     font.copyright += "Copyright (c) 2014 Tomokuni SEKIYA (Myrica)\n"
-    font.copyright += "Copyright (c) 2006-2012 Raph Levien (Inconsolata)\n"
+    font.copyright += "Copyright (c) 2006 The Inconsolata Project Authors (Inconsolata)\n"
     font.copyright += "Copyright (c) 2014 MM (GenShinGothic)\n"
     font.copyright += "Copyright (c) 2014 Adobe Systems Incorporated. (NotoSansJP)\n"
     font.copyright += "Licenses:\n"
