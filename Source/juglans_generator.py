@@ -37,17 +37,17 @@ outfontNoHint = "../Work/JuglansM_NoHint.ttf"
 scalingDownIfWidth_flag = True
 
 # set ascent and descent (line width parameters)
-newfont_ascent = 840
-newfont_descent = 184
+newfont_ascent = 800
+newfont_descent = 200
 newfont_em = newfont_ascent + newfont_descent
 
-newfont_winAscent = 840
-newfont_winDescent = 170
-newfont_typoAscent = newfont_winAscent
-newfont_typoDescent = -newfont_winDescent
+newfont_winAscent = 1004
+newfont_winDescent = 454
+newfont_typoAscent = 859
+newfont_typoDescent = -190
 newfont_typoLinegap = 0
-newfont_hheaAscent = newfont_winAscent
-newfont_hheaDescent = -newfont_winDescent
+newfont_hheaAscent = newfont_typoAscent
+newfont_hheaDescent = -newfont_typoDescent
 newfont_hheaLinegap = 0
 
 # define
@@ -240,7 +240,7 @@ def setFontProp(font, fontInfo):
     font.weight = "Book"
     font.copyright = "Copyright (c) 2021 pakutoma (Juglans)\n"
     font.copyright += "Copyright (c) 2014 Tomokuni SEKIYA (Myrica)\n"
-    font.copyright += "Copyright (c) 2006-2012 Raph Levien (Inconsolata)\n"
+    font.copyright += "Copyright (c) 2006 The Inconsolata Project Authors (Inconsolata)\n"
     font.copyright += "Copyright (c) 2014 MM (GenShinGothic)\n"
     font.copyright += "Copyright (c) 2014 Adobe Systems Incorporated. (NotoSansJP)\n"
     font.copyright += "Licenses:\n"
@@ -308,47 +308,15 @@ fIn = fontforge.open(srcfontIncosolata)
 
 # modify
 print("modify")
-# 拡大 "'`
-# select(fIn, 0x0022, 0x0027, 0x0060)
-# fIn.transform(matRescale(250, 600, 1.15, 1.15))
-# setWidth(fIn, 1000 / 2)
-#
-# 拡大 ,.:;
-# select(fIn, 0x002c, 0x002e, 0x003a, 0x003b)
-# fIn.transform(matRescale(250, 0, 1.20, 1.20))
-# setWidth(fIn, 1000 / 2)
-
-# 移動 ~
-select(fIn, 0x007e)
-fIn.transform(matMove(0, -88))
-
-# 移動 ()
-select(fIn, list(u"()"))
-fIn.transform(matMove(0, 89))
-
-# 移動 []
-select(fIn, list(u"[]"))
-fIn.transform(matMove(0, 15))
-
-# 移動 {}
-select(fIn, list(u"{}"))
-fIn.transform(matMove(0, 91))
-
-# | -> broken | (Inconsolata's glyph)
-copyAndPaste(fIn, 0x00a6, fIn, 0x007c)
-select(fIn, 0x007c)
-fIn.transform(matMove(0, 100))
 
 # D -> D of Eth (D with cross-bar)
 copyAndPaste(fIn, 0x0110, fIn, 0x0044)
 
-# r -> r of serif (Inconsolata's unused glyph)
-copyAndPaste(fIn, 65548, fIn, 0x0072)
-
-# removeHintAndInstr(fIn, 0x0022, 0x0027, 0x0060, list(u"\"'`,.:;()~[]{}|"))
-removeHintAndInstr(fIn, list(u"()~[]{}|"))
+# 0 with slash -> 0 with dot (Inconsolata's unused glyph)
+copyAndPaste(fIn, "zero.zero", fIn, 0x0030)
 
 # modify em
+# if change inconsolata's EM, TrueType hints break.
 fIn.em = newfont_em
 fIn.ascent = newfont_ascent
 fIn.descent = newfont_descent
@@ -356,7 +324,7 @@ fIn.descent = newfont_descent
 # 文字の置換え
 print("merge ReplaceParts")
 for glyph in fRp.glyphs():
-    if glyph.unicode in (0x002a, 0x002d): # ASTERISK, HYPHEN-MINUS
+    if glyph.unicode in (0x002a): # ASTERISK
         select(fRp, glyph.glyphname)
         fRp.copy()
         select(fIn, glyph.glyphname)
@@ -365,6 +333,7 @@ for glyph in fRp.glyphs():
 # 必要文字(半角英数字記号)だけを残して削除
 select(fIn, rng(0x0021, 0x007E))
 selectMore(fIn, 0x00B7) # MIDDLE DOT
+selectMore(fIn, 0x0307) # CONBINING DOT ABOVE (for i and j)
 fIn.selection.invert()
 fIn.clear()
 

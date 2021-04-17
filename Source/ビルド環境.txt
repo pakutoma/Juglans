@@ -1,6 +1,7 @@
 OS : Arch Linux on WSL2 (2021/04/04)
 fontforge : FontForge 20201107 Python3 バインディング版
 UniteTTC : UniteTTC (Linux版) 2017/03/01 http://yozvox.web.fc2.com/556E697465545443.html
+fonttools (ttx) : ttx 4.22.0
 tar : tar (GNU tar) 1.34
 xz : xz (XZ Utils) 5.2.5, liblzma 5.2.5
 zip : Zip 3.0 (July 5th 2008) by Info-ZIP
