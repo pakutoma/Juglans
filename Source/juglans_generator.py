@@ -17,7 +17,7 @@
 #     ～〜（FULLWIDTH TILDE・WAVE DASH）の区別
 
 # version
-newfont_version = "1.004.20210413"
+newfont_version = "2.000.20210417"
 newfont_sfntRevision = 0x00010000
 
 # set font name
