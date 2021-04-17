@@ -22,7 +22,7 @@ U+301C 〜 : WAVE DASH (Myrica ReplaceParts)
 
 ## サンプル
 ### Notepad++, 14pt
-![notepad++](https://user-images.githubusercontent.com/31642509/115113700-8e058700-9fc6-11eb-8e00-16d055e4b8e4.png)  
+![notepad++](https://user-images.githubusercontent.com/31642509/115114365-dc685500-9fc9-11eb-9651-38ecf0431f8a.png)
 ### Windows Terminal, 14pt
 ![windowsterminal](https://user-images.githubusercontent.com/31642509/115113712-99f14900-9fc6-11eb-8e02-b98e60b686dc.png)
 
