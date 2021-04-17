@@ -324,7 +324,7 @@ fIn.descent = newfont_descent
 # 文字の置換え
 print("merge ReplaceParts")
 for glyph in fRp.glyphs():
-    if glyph.unicode in (0x002a): # ASTERISK
+    if glyph.unicode in (0x002a,): # ASTERISK
         select(fRp, glyph.glyphname)
         fRp.copy()
         select(fIn, glyph.glyphname)
