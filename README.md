@@ -5,7 +5,8 @@ Juglans （ユグランス）は、 Inconsolata と源真ゴシックの合成�
 ## Myrica との違い
 - 合成元フォントからの字形変更をプログラミングに必要な最小限に留めました。
 - Inconsolata のバージョンを3.001（Google Fonts 版）に更新しました。
-- 源真ゴシックを Light から Normal に変更しました。
+- 通常ウェイトに合成する源真ゴシックのウェイトを Light から Normal に変更しました。
+- 太字ウェイトを追加しました。
 - Mgen+ 版を削除しました。
 - Proportional フォントおよび Narrow フォントを削除しました。
 - ビルド環境を Linux (Arch Linux を想定) に変更しました。
@@ -21,8 +22,8 @@ U+301C 〜 : WAVE DASH (Myrica ReplaceParts)
 ![字形の変更点](https://user-images.githubusercontent.com/31642509/118390760-c357d000-b66b-11eb-9253-bdf8edd44100.png)
 
 ## サンプル
-### Notepad++, 14pt
-![notepad++](https://user-images.githubusercontent.com/31642509/115114365-dc685500-9fc9-11eb-9651-38ecf0431f8a.png)
+### Notepad++, 14pt, 標準・太字ウェイト利用
+![notepad++](https://user-images.githubusercontent.com/31642509/118396305-e09b9700-b689-11eb-98f8-98c22c0ad9de.png)
 ### Windows Terminal, 14pt
 ![windowsterminal](https://user-images.githubusercontent.com/31642509/115113712-99f14900-9fc6-11eb-8e02-b98e60b686dc.png)
 
