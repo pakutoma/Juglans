@@ -14,12 +14,11 @@ Juglans （ユグランス）は、 Inconsolata と源真ゴシックの合成�
 
 ## 合成元フォントからの字形の変更点
 U+0030 0 : DIGIT ZERO (Inconsolata 内の別グリフ)  
-U+0044 D : LATIN CAPITAL LETTER D (Inconsolata 内の別グリフ)  
 U+002A * : ASTERISK (Myrica ReplaceParts)  
 U+2013 – : EN DASH (Myrica ReplaceParts)  
 U+2014 — : EM DASH (Myrica ReplaceParts)  
 U+301C 〜 : WAVE DASH (Myrica ReplaceParts)  
-![字形の変更点](https://user-images.githubusercontent.com/31642509/115113304-9e1c6700-9fc4-11eb-8ed7-911cb8059bc0.png)
+![字形の変更点](https://user-images.githubusercontent.com/31642509/118390760-c357d000-b66b-11eb-9253-bdf8edd44100.png)
 
 ## サンプル
 ### Notepad++, 14pt
