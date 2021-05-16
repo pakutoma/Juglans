@@ -21,11 +21,15 @@ newfont_version = "2.000.20210417"
 newfont_sfntRevision = 0x00010000
 
 # set font name
-newfont_name = ("../Work/Juglans.ttf", "Juglans", "Juglans", "Juglans")
+newfont_name = ("../Work/Juglans-Regular.ttf", "Juglans-Regular", "Juglans", "Juglans Regular")
+newfont_name_bold = ("../Work/Juglans-Bold.ttf", "Juglans-Bold", "Juglans", "Juglans Bold")
 # source file
-srcfontIncosolata = "../SourceTTF/Inconsolata-Regular.ttf"
-srcfontGenShin = "../SourceTTF/GenShinGothic-Monospace-Normal.ttf"
-srcfontMyricaReplaceParts = "../SourceTTF/myrica_ReplaceParts.ttf"
+srcfont_incosolata = "../SourceTTF/Inconsolata-Regular.ttf"
+srcfont_incosolata_bold = "../SourceTTF/Inconsolata-Bold.ttf"
+srcfont_GenShin = "../SourceTTF/GenShinGothic-Monospace-Normal.ttf"
+srcfont_GenShin_bold = "../SourceTTF/GenShinGothic-Monospace-Bold.ttf"
+srcfont_MyricaReplaceParts = "../SourceTTF/myrica_ReplaceParts.ttf"
+srcfont_MyricaReplaceParts_bold = "../SourceTTF/myrica_ReplaceParts_bold.ttf"
 
 # out file
 outfontNoHint = "../Work/Juglans_NoHint.ttf"
@@ -47,9 +51,14 @@ newfont_hheaAscent = newfont_typoAscent
 newfont_hheaDescent = -newfont_typoDescent
 newfont_hheaLinegap = 0
 
+# weight
+newfont_weight = "Regular"
+newfont_weight_bold = "Bold"
+
 # define
 generate_flags = ('opentype', 'PfEd-lookups', 'TeX-table')
-panoseBase = (2, 11, 5, 9, 2, 2, 3, 2, 2, 7)
+panose_base = (2, 11, 6, 9, 2, 2, 3, 2, 2, 7)
+panose_base_bold = (2, 11, 8, 9, 2, 2, 3, 2, 2, 7)
 
 ########################################
 # setting
@@ -73,14 +82,26 @@ fontforge.setPrefs('CopyTTFInstrs', 1)
 
 print("Juglans generator " + newfont_version)
 print("This script is for generating 'Juglans' font")
-if os.path.exists(srcfontIncosolata) == False:
-    print("Error: " + srcfontIncosolata + " not found")
+
+if len(sys.argv) > 1 and sys.argv[1] == "bold":
+    print("Generate Juglans-Bold")
+    newfont_name = newfont_name_bold
+    newfont_weight = newfont_weight_bold
+    srcfont_incosolata = srcfont_incosolata_bold
+    srcfont_GenShin = srcfont_GenShin_bold
+    srcfont_MyricaReplaceParts = srcfont_MyricaReplaceParts_bold
+    panose_base = panose_base_bold
+else:
+    print("Generate Juglans-Normal")
+
+if os.path.exists(srcfont_incosolata) == False:
+    print("Error: " + srcfont_incosolata + " not found")
     sys.exit(1)
-if os.path.exists(srcfontMyricaReplaceParts) == False:
-    print("Error: " + srcfontMyricaReplaceParts + " not found")
+if os.path.exists(srcfont_GenShin) == False:
+    print("Error: " + srcfont_GenShin + " not found")
     sys.exit(1)
-if os.path.exists(srcfontGenShin) == False:
-    print("Error: " + srcfontGenShin + " not found")
+if os.path.exists(srcfont_MyricaReplaceParts) == False:
+    print("Error: " + srcfont_MyricaReplaceParts + " not found")
     sys.exit(1)
 
 
@@ -234,7 +255,7 @@ def setFontProp(font, fontInfo):
     font.fontname = fontInfo[1]
     font.familyname = fontInfo[2]
     font.fullname = fontInfo[3]
-    font.weight = "Book"
+    font.weight = newfont_weight
     font.copyright = "Copyright (c) 2021 pakutoma (Juglans)\n"
     font.copyright += "Copyright (c) 2014 Tomokuni SEKIYA (Myrica)\n"
     font.copyright += "Copyright (c) 2006 The Inconsolata Project Authors (Inconsolata)\n"
@@ -250,9 +271,9 @@ def setFontProp(font, fontInfo):
     font.hasvmetrics = True
     font.head_optimized_for_cleartype = True
 
-    font.os2_panose = panoseBase
-    font.os2_vendor = "ES"
-    font.os2_version = 1
+    font.os2_panose = panose_base
+    font.os2_vendor = "    "
+    font.os2_version = 4
 
     font.os2_winascent = newfont_winAscent
     font.os2_winascent_add = 0
@@ -283,8 +304,8 @@ charZEisu = list(u"０１２３４５６７８９ＡＢＣＤＥＦＧＨＩＪ�
 ########################################
 
 print()
-print("Open " + srcfontMyricaReplaceParts)
-fRp = fontforge.open(srcfontMyricaReplaceParts)
+print("Open " + srcfont_MyricaReplaceParts)
+fRp = fontforge.open(srcfont_MyricaReplaceParts)
 
 # modify em
 fRp.em = newfont_em
@@ -300,8 +321,8 @@ fRp.round()
 ########################################
 
 print()
-print("Open " + srcfontIncosolata)
-fIn = fontforge.open(srcfontIncosolata)
+print("Open " + srcfont_incosolata)
+fIn = fontforge.open(srcfont_incosolata)
 
 # modify
 print("modify")
@@ -342,8 +363,8 @@ fIn.close()
 ########################################
 
 print()
-print("Open " + srcfontGenShin)
-fGs = fontforge.open(srcfontGenShin)
+print("Open " + srcfont_GenShin)
+fGs = fontforge.open(srcfont_GenShin)
 
 # modify
 print("modify")
