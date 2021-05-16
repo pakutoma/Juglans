@@ -1,12 +1,13 @@
 # プログラミング用フォント Juglans
-Juglans （ユグランス）は、Inconsolataと源真ゴシックの合成フォントです。  
+Juglans （ユグランス）は、Inconsolata と源真ゴシックの合成フォントです。  
 [プログラミング用フォント Myrica](https://github.com/tomokuni/Myrica) の改変版として、Myrica のスクリプトおよびフォントを利用しています。  
 
 ## Myrica との違い
 - 合成元フォントからの字形変更をプログラミングに必要な最小限に留めました。
-- Inconsolataのバージョンを3.001（Google Fonts版）に更新しました。
-- 源真ゴシックをLightからNormalに変更しました。
+- Inconsolata のバージョンを3.001（Google Fonts 版）に更新しました。
+- 源真ゴシックを Light から Normal に変更しました。
 - Mgen+ 版を削除しました。
+- Proportional フォントおよび Narrow フォントを削除しました。
 - ビルド環境を Linux (Arch Linux を想定) に変更しました。
 - 生成スクリプトを Python 3 に変更しました。
 - 7z 圧縮を xz 圧縮に変更しました。
@@ -37,4 +38,4 @@ Inconsolata (ASCII 文字)
 源真ゴシック (ASCII 文字以外)  
 
 ## 利用フォントのライセンス
-サードパーティーライセンス.txtを参照してください。
+サードパーティーライセンス.txt を参照してください。
