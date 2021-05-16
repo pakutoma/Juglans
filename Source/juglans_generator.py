@@ -21,17 +21,14 @@ newfont_version = "2.000.20210417"
 newfont_sfntRevision = 0x00010000
 
 # set font name
-newfontM = ("../Work/JuglansM.ttf", "JuglansM", "Juglans M", "Juglans Monospace")
-newfontP = ("../Work/JuglansP.ttf", "JuglansP", "Juglans P", "Juglans Proportional")
-newfontN = ("../Work/JuglansN.ttf", "JuglansN", "Juglans N", "Juglans Narrow")
-
+newfont_name = ("../Work/Juglans.ttf", "Juglans", "Juglans", "Juglans")
 # source file
 srcfontIncosolata = "../SourceTTF/Inconsolata-Regular.ttf"
 srcfontGenShin = "../SourceTTF/GenShinGothic-Monospace-Normal.ttf"
 srcfontMyricaReplaceParts = "../SourceTTF/myrica_ReplaceParts.ttf"
 
 # out file
-outfontNoHint = "../Work/JuglansM_NoHint.ttf"
+outfontNoHint = "../Work/Juglans_NoHint.ttf"
 
 # flag
 scalingDownIfWidth_flag = True
@@ -401,15 +398,15 @@ fGs.close()
 fRp.close()
 
 ########################################
-# create Juglans Monospace
+# create Juglans
 ########################################
 fMm = fontforge.open("../Work/modIncosolata.ttf")
 
 print()
-print("Build " + newfontM[0])
+print("Build " + newfont_name[0])
 
 # pre-process
-setFontProp(fMm, newfontM)
+setFontProp(fMm, newfont_name)
 
 # merge GenShin
 print("merge GenShin")
@@ -423,138 +420,7 @@ fMm.selection.all()
 fMm.round()
 
 # generate
-print("Generate " + newfontM[0])
-fMm.generate(newfontM[0], '', generate_flags)
+print("Generate " + newfont_name[0])
+fMm.generate(newfont_name[0], '', generate_flags)
 
 fMm.close()
-
-########################################
-# create Juglans Proportional
-########################################
-print()
-print("Build " + newfontP[0])
-fMp = fontforge.open(newfontM[0])
-
-# pre-process
-fMp.fontname = newfontP[1]
-fMp.familyname = newfontP[2]
-fMp.fullname = newfontP[3]
-fMp.sfnt_names = (('English (US)', 'UniqueID', newfontP[2]),)
-
-panose = list(fMp.os2_panose)
-panose[3] = 0
-fMp.os2_panose = tuple(panose)
-
-# modify
-print("modify")
-
-# 全角かな
-zkana = (50, 0.90, 1.00, rng(0x3041, 0x31FF))
-# 全角
-zetc = (50, 0.95, 1.00,)
-# 半角
-hetc = (60,)
-
-# 全文字の幅の自動設定
-fMp.selection.all()
-for glyph in fMp.selection.byGlyphs:
-    # print(glyph.glyphname + ", code " + str(glyph.unicode) + ", width " + str(glyph.width))
-    if glyph.unicode in zkana[3]:  # 全角かな
-        glyph.transform(matRescale(0, 0, zkana[1], zkana[2]))
-        setAutoWidthGlyph(glyph, zkana[0])
-    elif glyph.width == newfont_em:  # その他の全角文字
-        glyph.transform(matRescale(0, 0, zetc[1], zetc[2]))
-        setAutoWidthGlyph(glyph, zetc[0])
-    else:  # 半角文字
-        setAutoWidthGlyph(glyph, hetc[0])
-
-# 半角数字は幅固定で中央配置
-select(fMp, rng(0x0030, 0x0039))  # 0-9
-setWidth(fMp, 490)
-centerInWidth(fMp)
-
-# スペース
-select(fMp, 0x0020)  # 半角スペース
-setWidth(fMp, 340)
-centerInWidth(fMp)
-select(fMp, 0x3000)  # 全角スペース
-setWidth(fMp, 680)
-centerInWidth(fMp)
-
-# post-process
-fMp.selection.all()
-fMp.round()
-
-# generate
-print("Generate " + newfontP[0])
-fMp.generate(newfontP[0], '', generate_flags)
-
-fMp.close()
-
-########################################
-# create Juglans Narrow
-########################################
-print()
-print("Build " + newfontN[0])
-fMn = fontforge.open(newfontM[0])
-
-# pre-process
-fMn.fontname = newfontN[1]
-fMn.familyname = newfontN[2]
-fMn.fullname = newfontN[3]
-fMn.sfnt_names = (('English (US)', 'UniqueID', newfontN[2]),)
-
-panose = list(fMn.os2_panose)
-panose[3] = 0
-fMn.os2_panose = tuple(panose)
-
-# modify
-print("modify")
-
-# 全角かな
-zkana = (50, 0.55, 1.00, rng(0x3041, 0x31FF))
-# その他の全角文字
-zetc = (50, 0.60, 1.00)
-# その他の半角文字
-hetc = (50, 0.68, 1.00)
-
-# 拡大縮小 と 幅の自動設定
-fMn.selection.all()
-for glyph in fMn.selection.byGlyphs:
-    # print(glyph.glyphname + ", code " + str(glyph.unicode) + ", width " + str(glyph.width))
-    glyph.ttinstrs = ()
-    if glyph.unicode in zkana[3]:  # 全角かな
-        glyph.transform(matRescale(0, 0, zkana[1], zkana[2]))
-        setAutoWidthGlyph(glyph, zkana[0])
-    elif glyph.width == newfont_em:  # その他の全角文字
-        glyph.transform(matRescale(0, 0, zetc[1], zetc[2]))
-        setAutoWidthGlyph(glyph, zetc[0])
-    else:  # 半角文字
-        glyph.transform(matRescale(0, 0, hetc[1], hetc[2]))
-        bb = glyph.boundingBox()
-        nw = (bb[2] - bb[0]) + hetc[0] * 2
-        if glyph.width > nw:
-            setAutoWidthGlyph(glyph, hetc[0])
-
-# 半角数字は幅固定で中央配置
-select(fMn, rng(0x0030, 0x0039))  # 0-9
-setWidth(fMn, 350)
-centerInWidth(fMn)
-
-# スペース
-select(fMn, 0x0020)  # 半角スペース
-setWidth(fMn, 350)
-centerInWidth(fMn)
-select(fMn, 0x3000)  # 全角スペース
-setWidth(fMn, 500)
-centerInWidth(fMn)
-
-# post-process
-fMn.selection.all()
-fMn.round()
-
-# generate
-print("Generate " + newfontN[0])
-fMn.generate(newfontN[0], '', generate_flags)
-
-fMn.close()
