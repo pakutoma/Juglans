@@ -306,9 +306,6 @@ fIn = fontforge.open(srcfontIncosolata)
 # modify
 print("modify")
 
-# D -> D of Eth (D with cross-bar)
-copyAndPaste(fIn, 0x0110, fIn, 0x0044)
-
 # 0 with slash -> 0 with dot (Inconsolata's unused glyph)
 copyAndPaste(fIn, "zero.zero", fIn, 0x0030)
 
