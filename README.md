@@ -7,6 +7,7 @@ Juglans （ユグランス）は、 Inconsolata と源真ゴシックの合成�
 - Inconsolata のバージョンを3.001（Google Fonts 版）に更新しました。
 - 通常ウェイトに合成する源真ゴシックのウェイトを Light から Normal に変更しました。
 - 太字ウェイトを追加しました。
+- EastAsianWidth.txt における W および F のみを全角フォントとしました。
 - Mgen+ 版を削除しました。
 - Proportional フォントおよび Narrow フォントを削除しました。
 - ビルド環境を Linux (Arch Linux を想定) に変更しました。
