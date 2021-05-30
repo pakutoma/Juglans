@@ -15,7 +15,7 @@
 # ・他の文字は、源真ゴシック
 
 # version
-newfont_version = "2.001.20210516"
+newfont_version = "2.002.20210530"
 newfont_sfntRevision = 0x00010000
 
 # set font name
