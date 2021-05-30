@@ -66,6 +66,7 @@ panose_base_bold = (2, 11, 8, 9, 2, 2, 3, 2, 2, 7)
 
 import os
 import sys
+
 import fontforge
 import psMat
 
@@ -261,6 +262,7 @@ def setFontProp(font, fontInfo):
     font.copyright += "Copyright (c) 2006 The Inconsolata Project Authors (Inconsolata)\n"
     font.copyright += "Copyright (c) 2014 MM (GenShinGothic)\n"
     font.copyright += "Copyright (c) 2014 Adobe Systems Incorporated. (NotoSansJP)\n"
+    font.copyright += "Copyright (c) Bitstream. DejaVu changes are in public domain. Glyphs imported from Arev fonts are (c) Tavmjong Bah. (DejaVu LGC)\n"
     font.copyright += "Licenses:\n"
     font.copyright += "SIL Open Font License Version 1.1 "
     font.copyright += "(http://scripts.sil.org/ofl)\n"
@@ -339,7 +341,7 @@ fIn.descent = newfont_descent
 # 文字の置換え
 print("merge ReplaceParts")
 for glyph in fRp.glyphs():
-    if glyph.unicode in (0x002a,): # ASTERISK
+    if glyph.unicode in (0x002a,):  # ASTERISK
         select(fRp, glyph.glyphname)
         fRp.copy()
         select(fIn, glyph.glyphname)
@@ -347,8 +349,8 @@ for glyph in fRp.glyphs():
 
 # 必要文字(半角英数字記号)だけを残して削除
 select(fIn, rng(0x0021, 0x007E))
-selectMore(fIn, 0x00B7) # MIDDLE DOT
-selectMore(fIn, 0x0307) # CONBINING DOT ABOVE (for i and j)
+selectMore(fIn, 0x00B7)  # MIDDLE DOT
+selectMore(fIn, 0x0307)  # CONBINING DOT ABOVE (for i and j)
 fIn.selection.invert()
 fIn.clear()
 
@@ -377,7 +379,7 @@ fGs.descent = newfont_descent
 # 文字の置換え
 print("merge ReplaceParts")
 for glyph in fRp.glyphs():
-    if glyph.unicode in (0x2013, 0x2014, 0x301c): # EN DASH, EM DASH, WAVE DASH
+    if glyph.unicode in (0x2013, 0x2014, 0x301c):  # EN DASH, EM DASH, WAVE DASH
         select(fRp, glyph.glyphname)
         fRp.copy()
         select(fGs, glyph.glyphname)

@@ -35,7 +35,8 @@ Juglans フォント、生成スクリプト共に SIL OPEN FONT LICENSE Version
 ## 利用フォント
 Myrica (生成スクリプトおよび ReplaceParts の一部)  
 Inconsolata (ASCII 文字)  
-源真ゴシック (ASCII 文字以外)  
+源真ゴシック (全角文字)  
+DejaVu LGC (Inconsolata に未収録の半角文字)  
 
 ## 利用フォントのライセンス
 サードパーティーライセンス.txt を参照してください。
