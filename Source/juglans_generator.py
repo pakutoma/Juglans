@@ -13,8 +13,6 @@
 # 以下のように構成されます。
 # ・英数字記号は、Inconsolata
 # ・他の文字は、源真ゴシック
-# ・一部の文字を視認性向上のために migu の特徴を取込み
-#     ～〜（FULLWIDTH TILDE・WAVE DASH）の区別
 
 # version
 newfont_version = "2.001.20210516"
@@ -30,6 +28,8 @@ srcfont_GenShin = "../SourceTTF/GenShinGothic-Monospace-Normal.ttf"
 srcfont_GenShin_bold = "../SourceTTF/GenShinGothic-Monospace-Bold.ttf"
 srcfont_MyricaReplaceParts = "../SourceTTF/myrica_ReplaceParts.ttf"
 srcfont_MyricaReplaceParts_bold = "../SourceTTF/myrica_ReplaceParts_bold.ttf"
+srcfont_dejavu = "../SourceTTF/DejaVuLGCSansMono.ttf"
+srcfont_dejavu_bold = "../SourceTTF/DejaVuLGCSansMono-Bold.ttf"
 
 # out file
 outfontNoHint = "../Work/Juglans_NoHint.ttf"
@@ -66,8 +66,10 @@ panose_base_bold = (2, 11, 8, 9, 2, 2, 3, 2, 2, 7)
 
 import os
 import sys
+
 import fontforge
 import psMat
+import unicodedata
 
 # 縦書きのために指定する
 fontforge.setPrefs('CoverageFormatsAllowed', 1)
@@ -261,6 +263,7 @@ def setFontProp(font, fontInfo):
     font.copyright += "Copyright (c) 2006 The Inconsolata Project Authors (Inconsolata)\n"
     font.copyright += "Copyright (c) 2014 MM (GenShinGothic)\n"
     font.copyright += "Copyright (c) 2014 Adobe Systems Incorporated. (NotoSansJP)\n"
+    font.copyright += "Copyright (c) Bitstream. DejaVu changes are in public domain. Glyphs imported from Arev fonts are (c) Tavmjong Bah. (DejaVu LGC)\n"
     font.copyright += "Licenses:\n"
     font.copyright += "SIL Open Font License Version 1.1 "
     font.copyright += "(http://scripts.sil.org/ofl)\n"
@@ -339,24 +342,52 @@ fIn.descent = newfont_descent
 # 文字の置換え
 print("merge ReplaceParts")
 for glyph in fRp.glyphs():
-    if glyph.unicode in (0x002a,): # ASTERISK
+    if glyph.unicode in (0x002a,):  # ASTERISK
         select(fRp, glyph.glyphname)
         fRp.copy()
         select(fIn, glyph.glyphname)
         fIn.paste()
-
-# 必要文字(半角英数字記号)だけを残して削除
-select(fIn, rng(0x0021, 0x007E))
-selectMore(fIn, 0x00B7) # MIDDLE DOT
-selectMore(fIn, 0x0307) # CONBINING DOT ABOVE (for i and j)
-fIn.selection.invert()
-fIn.clear()
 
 fIn.selection.all()
 fIn.round()
 
 fIn.generate("../Work/modIncosolata.ttf", '', generate_flags)
 fIn.close()
+
+
+########################################
+# modify DejaVu LGC
+########################################
+
+print("\nOpen " + srcfont_dejavu)
+de_font = fontforge.open(srcfont_dejavu)
+
+# modify
+print("modify")
+
+print("remove Glyphs")
+de_font.selection.none()
+# EastAsianWidthで全角（WまたはF）のグリフを削除
+for glyph in de_font.glyphs():
+    if glyph.unicode > 0 and unicodedata.east_asian_width(chr(glyph.unicode)) in ("W", "F"):
+        de_font.selection.select(("more",), glyph.glyphname)
+de_font.clear()
+
+# modify em
+de_font.em = newfont_em
+de_font.ascent = newfont_ascent
+de_font.descent = newfont_descent
+
+# scale down
+for glyph in de_font.glyphs():
+    glyph.transform(psMat.scale(0.83))
+    glyph.width = 500
+
+de_font.selection.all()
+de_font.round()
+
+de_font.generate("../Work/modDejaVu.ttf", '', generate_flags)
+de_font.close()
 
 ########################################
 # modified GenShin
@@ -377,17 +408,13 @@ fGs.descent = newfont_descent
 # 文字の置換え
 print("merge ReplaceParts")
 for glyph in fRp.glyphs():
-    if glyph.unicode in (0x2013, 0x2014, 0x301c): # EN DASH, EM DASH, WAVE DASH
+    if glyph.unicode in (0x2013, 0x2014, 0x301c):  # EN DASH, EM DASH, WAVE DASH
         select(fRp, glyph.glyphname)
         fRp.copy()
         select(fGs, glyph.glyphname)
         fGs.paste()
 
-# 半角英数字記号を削除
-select(fGs, rng(0x0021, 0x007E))
-fGs.clear()
-
-# scaling down
+# scale down
 if scalingDownIfWidth_flag == True:
     print("While scaling, wait a little...")
     # 0.91はRictyに準じた。
@@ -418,27 +445,35 @@ fRp.close()
 ########################################
 # create Juglans
 ########################################
-fMm = fontforge.open("../Work/modIncosolata.ttf")
+ju_font = fontforge.open("../Work/modIncosolata.ttf")
+de_font = fontforge.open("../Work/modDejaVu.ttf")
+ge_font = fontforge.open("../Work/modGenShin.ttf")
 
 print()
 print("Build " + newfont_name[0])
 
 # pre-process
-setFontProp(fMm, newfont_name)
+setFontProp(ju_font, newfont_name)
+
+# merge DejaVu
+print("merge DejaVu")
+# マージ
+ju_font.mergeFonts("../Work/modDejaVu.ttf")
 
 # merge GenShin
 print("merge GenShin")
 # マージ
-fMm.mergeFonts("../Work/modGenShin.ttf")
-fMm.os2_unicoderanges = os2_unicoderanges
-fMm.os2_codepages = os2_codepages
+ju_font.mergeFonts("../Work/modGenShin.ttf")
+
+ju_font.os2_unicoderanges = os2_unicoderanges
+ju_font.os2_codepages = os2_codepages
 
 # post-process
-fMm.selection.all()
-fMm.round()
+ju_font.selection.all()
+ju_font.round()
 
 # generate
 print("Generate " + newfont_name[0])
-fMm.generate(newfont_name[0], '', generate_flags)
+ju_font.generate(newfont_name[0], '', generate_flags)
 
-fMm.close()
+ju_font.close()
