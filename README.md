@@ -1,42 +1,26 @@
 # プログラミング用フォント Juglans
-Juglans （ユグランス）は、 Inconsolata と源真ゴシックの合成フォントです。  
-[プログラミング用フォント Myrica](https://github.com/tomokuni/Myrica) の改変版として、Myrica のスクリプトおよびフォントを利用しています。  
+Juglans （ユグランス）は、 Inconsolata と源真ゴシックをベースとした合成フォントです。  
+[プログラミング用フォント Myrica](https://github.com/tomokuni/Myrica) のスクリプトを利用しています。  
 
-## Myrica との違い
-- 合成元フォントからの字形変更をプログラミングに必要な最小限に留めました。
-- Inconsolata のバージョンを3.001（Google Fonts 版）に更新しました。
-- 通常ウェイトに合成する源真ゴシックのウェイトを Light から Normal に変更しました。
-- 太字ウェイトを追加しました。
-- EastAsianWidth.txt における W および F のみを全角フォントとしました。
-- Mgen+ 版を削除しました。
-- Proportional フォントおよび Narrow フォントを削除しました。
-- ビルド環境を Linux (Arch Linux を想定) に変更しました。
-- 生成スクリプトを Python 3 に変更しました。
-- 7z 圧縮を xz 圧縮に変更しました。
-
-## 合成元フォントからの字形の変更点
-U+0030 0 : DIGIT ZERO (Inconsolata 内の別グリフ)  
-U+002A * : ASTERISK (Myrica ReplaceParts)  
-U+2013 – : EN DASH (Myrica ReplaceParts)  
-U+2014 — : EM DASH (Myrica ReplaceParts)  
-U+301C 〜 : WAVE DASH (Myrica ReplaceParts)  
-![字形の変更点](https://user-images.githubusercontent.com/31642509/118390760-c357d000-b66b-11eb-9253-bdf8edd44100.png)
+## 特徴
+- 字形の変更をプログラミングに必要な最小限に留めています。
+- 標準ウェイト・太字ウェイトがあります。
+- EastAsianWidth における W および F のみを全角フォントとしています。
 
 ## サンプル
-### Notepad++, 14pt, 標準・太字ウェイト利用
-![notepad++](https://user-images.githubusercontent.com/31642509/118396305-e09b9700-b689-11eb-98f8-98c22c0ad9de.png)
-### Windows Terminal, 14pt
-![windowsterminal](https://user-images.githubusercontent.com/31642509/115113712-99f14900-9fc6-11eb-8e02-b98e60b686dc.png)
-
+### Notepad++, 12pt, スケーリング150%, 標準・太字ウェイト利用
+<img width="700" alt="Notepad++" src="https://user-images.githubusercontent.com/31642509/181803388-a23e142b-cca0-49c9-862b-b11d46dfcbc1.png">
+### Windows Terminal, 14pt, スケーリング150%
+<img width="700" alt="WindowsTerminal" src="https://user-images.githubusercontent.com/31642509/181803500-942ed719-6538-4b7d-b7ed-541adc38ae24.png">
 
 ## ライセンス
-Juglans フォント、生成スクリプト共に SIL OPEN FONT LICENSE Version 1.1 の下で利用できます。  
-また、"Juglans" は予約フォント名ではなく、本フォントの派生フォントは、 "Juglans" というフォント名を自由に利用可能です。  
+Juglans フォント、生成スクリプト共に SIL OPEN FONT LICENSE Version 1.1 の下で利用できます。
 
-## 利用フォント
-Myrica (生成スクリプトおよび ReplaceParts の一部)  
+## 利用フォントおよびスクリプト
+Myrica (生成スクリプト)  
 Inconsolata (ASCII 文字)  
 源真ゴシック (全角文字)  
+Anonymous Pro (ASCII 文字のアスタリスクとチルダ)  
 DejaVu LGC (Inconsolata に未収録の半角文字)  
 
 ## 利用フォントのライセンス
