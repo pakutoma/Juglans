@@ -6,16 +6,10 @@
 # Modified by: pakutoma
 #
 # This script is for generating ``juglans'' font
-#
-# * Inconsolata  : Inconsolata-Regular.ttf           : 1.016 (Google Fonts)
-# * 源真ゴシック : GenShinGothic-Monospace-Light.ttf : 1.002.20150607
-#
-# 以下のように構成されます。
-# ・英数字記号は、Inconsolata
-# ・他の文字は、源真ゴシック
+
 
 # version
-newfont_version = "2.002.20210530"
+newfont_version = "2.003.20220730"
 newfont_sfntRevision = 0x00010000
 
 # set font name
@@ -26,10 +20,11 @@ srcfont_incosolata = "../SourceTTF/Inconsolata-Regular.ttf"
 srcfont_incosolata_bold = "../SourceTTF/Inconsolata-Bold.ttf"
 srcfont_GenShin = "../SourceTTF/GenShinGothic-Monospace-Normal.ttf"
 srcfont_GenShin_bold = "../SourceTTF/GenShinGothic-Monospace-Bold.ttf"
-srcfont_MyricaReplaceParts = "../SourceTTF/myrica_ReplaceParts.ttf"
-srcfont_MyricaReplaceParts_bold = "../SourceTTF/myrica_ReplaceParts_bold.ttf"
 srcfont_dejavu = "../SourceTTF/DejaVuLGCSansMono.ttf"
 srcfont_dejavu_bold = "../SourceTTF/DejaVuLGCSansMono-Bold.ttf"
+srcfont_anonpro = "../SourceTTF/AnonymousProMinus.ttf"
+srcfont_anonpro_bold = "../SourceTTF/AnonymousProMinusB.ttf"
+
 
 # out file
 outfontNoHint = "../Work/Juglans_NoHint.ttf"
@@ -91,7 +86,7 @@ if len(sys.argv) > 1 and sys.argv[1] == "bold":
     newfont_weight = newfont_weight_bold
     srcfont_incosolata = srcfont_incosolata_bold
     srcfont_GenShin = srcfont_GenShin_bold
-    srcfont_MyricaReplaceParts = srcfont_MyricaReplaceParts_bold
+    srcfont_anonpro = srcfont_anonpro_bold
     panose_base = panose_base_bold
 else:
     print("Generate Juglans-Normal")
@@ -102,10 +97,6 @@ if os.path.exists(srcfont_incosolata) == False:
 if os.path.exists(srcfont_GenShin) == False:
     print("Error: " + srcfont_GenShin + " not found")
     sys.exit(1)
-if os.path.exists(srcfont_MyricaReplaceParts) == False:
-    print("Error: " + srcfont_MyricaReplaceParts + " not found")
-    sys.exit(1)
-
 
 ########################################
 # define function
@@ -259,11 +250,11 @@ def setFontProp(font, fontInfo):
     font.fullname = fontInfo[3]
     font.weight = newfont_weight
     font.copyright = "Copyright (c) 2021 pakutoma (Juglans)\n"
-    font.copyright += "Copyright (c) 2014 Tomokuni SEKIYA (Myrica)\n"
     font.copyright += "Copyright (c) 2006 The Inconsolata Project Authors (Inconsolata)\n"
     font.copyright += "Copyright (c) 2014 MM (GenShinGothic)\n"
     font.copyright += "Copyright (c) 2014 Adobe Systems Incorporated. (NotoSansJP)\n"
     font.copyright += "Copyright (c) Bitstream. DejaVu changes are in public domain. Glyphs imported from Arev fonts are (c) Tavmjong Bah. (DejaVu LGC)\n"
+    font.copyright += "Copyright (c) 2009, Mark Simonson (http://www.ms-studio.com, mark@marksimonson.com) (Anonymous Pro Minus)\n"
     font.copyright += "Licenses:\n"
     font.copyright += "SIL Open Font License Version 1.1 "
     font.copyright += "(http://scripts.sil.org/ofl)\n"
@@ -303,23 +294,6 @@ charHKKana = list(u"､｡･ｰﾞﾟ｢｣ｱｲｳｴｵｶｷｸｹｺｻｼ
 charZEisu = list(u"０１２３４５６７８９ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ")
 
 ########################################
-# modified ReplaceParts
-########################################
-
-print()
-print("Open " + srcfont_MyricaReplaceParts)
-fRp = fontforge.open(srcfont_MyricaReplaceParts)
-
-# modify em
-fRp.em = newfont_em
-fRp.ascent = newfont_ascent
-fRp.descent = newfont_descent
-
-# post-process
-fRp.selection.all()
-fRp.round()
-
-########################################
 # modified Inconsolata
 ########################################
 
@@ -333,20 +307,19 @@ print("modify")
 # 0 with slash -> 0 with dot (Inconsolata's unused glyph)
 copyAndPaste(fIn, "zero.zero", fIn, 0x0030)
 
+print("remove Glyphs")
+fIn.selection.none()
+# アスタリスクとチルダのグリフを削除
+for glyph in fIn.glyphs():
+    if glyph.unicode in (0x002a, 0x007e):
+        fIn.selection.select(("more",), glyph.glyphname)
+fIn.clear()
+
 # modify em
 # if change inconsolata's EM, TrueType hints break.
 fIn.em = newfont_em
 fIn.ascent = newfont_ascent
 fIn.descent = newfont_descent
-
-# 文字の置換え
-print("merge ReplaceParts")
-for glyph in fRp.glyphs():
-    if glyph.unicode in (0x002a,):  # ASTERISK
-        select(fRp, glyph.glyphname)
-        fRp.copy()
-        select(fIn, glyph.glyphname)
-        fIn.paste()
 
 fIn.selection.all()
 fIn.round()
@@ -354,6 +327,39 @@ fIn.round()
 fIn.generate("../Work/modIncosolata.ttf", '', generate_flags)
 fIn.close()
 
+########################################
+# modify Anonymous Pro Minus
+########################################
+
+print("\nOpen " + srcfont_anonpro)
+anon_font = fontforge.open(srcfont_anonpro)
+
+# modify
+print("modify")
+
+print("remove Glyphs")
+anon_font.selection.none()
+# アスタリスクとチルダ以外のグリフを削除
+for glyph in anon_font.glyphs():
+    if glyph.unicode not in (0x002a, 0x007e):
+        anon_font.selection.select(("more",), glyph.glyphname)
+anon_font.clear()
+
+# modify em
+anon_font.em = newfont_em
+anon_font.ascent = newfont_ascent
+anon_font.descent = newfont_descent
+
+# scale down and move
+for glyph in anon_font.glyphs():
+    glyph.transform(psMat.translate(26, 90))
+    glyph.width = 500
+
+anon_font.selection.all()
+anon_font.round()
+
+anon_font.generate("../Work/modAnon.ttf", '', generate_flags)
+anon_font.close()
 
 ########################################
 # modify DejaVu LGC
@@ -405,15 +411,6 @@ fGs.em = newfont_em
 fGs.ascent = newfont_ascent
 fGs.descent = newfont_descent
 
-# 文字の置換え
-print("merge ReplaceParts")
-for glyph in fRp.glyphs():
-    if glyph.unicode in (0x2013, 0x2014, 0x301c):  # EN DASH, EM DASH, WAVE DASH
-        select(fRp, glyph.glyphname)
-        fRp.copy()
-        select(fGs, glyph.glyphname)
-        fGs.paste()
-
 # scale down
 if scalingDownIfWidth_flag == True:
     print("While scaling, wait a little...")
@@ -440,7 +437,6 @@ os2_unicoderanges = fGs.os2_unicoderanges
 os2_codepages = fGs.os2_codepages
 
 fGs.close()
-fRp.close()
 
 ########################################
 # create Juglans
@@ -448,12 +444,17 @@ fRp.close()
 ju_font = fontforge.open("../Work/modIncosolata.ttf")
 de_font = fontforge.open("../Work/modDejaVu.ttf")
 ge_font = fontforge.open("../Work/modGenShin.ttf")
+an_font = fontforge.open("../Work/modAnon.ttf")
 
 print()
 print("Build " + newfont_name[0])
 
 # pre-process
 setFontProp(ju_font, newfont_name)
+
+# merge Anonymous Pro
+print("merge Anonymous Pro")
+ju_font.mergeFonts("../Work/modAnon.ttf")
 
 # merge DejaVu
 print("merge DejaVu")
