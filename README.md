@@ -10,6 +10,7 @@ Juglans （ユグランス）は、 Inconsolata と源真ゴシックをベー�
 ## サンプル
 ### Notepad++, 12pt, スケーリング150%, 標準・太字ウェイト利用
 <img width="700" alt="Notepad++" src="https://user-images.githubusercontent.com/31642509/181803388-a23e142b-cca0-49c9-862b-b11d46dfcbc1.png">
+
 ### Windows Terminal, 14pt, スケーリング150%
 <img width="700" alt="WindowsTerminal" src="https://user-images.githubusercontent.com/31642509/181803500-942ed719-6538-4b7d-b7ed-541adc38ae24.png">
 
