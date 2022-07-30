@@ -20,7 +20,7 @@ Juglans フォント、生成スクリプト共に SIL OPEN FONT LICENSE Version
 Myrica (生成スクリプト)  
 Inconsolata (ASCII 文字)  
 源真ゴシック (全角文字)  
-Anonymous Pro (ASCII 文字のアスタリスクとチルダ)  
+Anonymous Pro Minus(ASCII 文字のアスタリスクとチルダ)  
 DejaVu LGC (Inconsolata に未収録の半角文字)  
 
 ## 利用フォントのライセンス
