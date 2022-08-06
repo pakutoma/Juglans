@@ -9,12 +9,12 @@
 
 
 # version
-newfont_version = "2.003.20220730"
+newfont_version = "2.004.20220807"
 newfont_sfntRevision = 0x00010000
 
 # set font name
-newfont_name = ("../Work/Juglans-Regular.ttf", "Juglans-Regular", "Juglans", "Juglans Regular")
-newfont_name_bold = ("../Work/Juglans-Bold.ttf", "Juglans-Bold", "Juglans", "Juglans Bold")
+newfont_name = (f"../Work/Juglans-{sys.argv[2]}-for-{sys.argv[1]}.ttf", "Juglans-Regular", "Juglans", "Juglans Regular")
+newfont_name_bold = (f"../Work/Juglans-{sys.argv[2]}-for-{sys.argv[1]}.ttf", "Juglans-Bold", "Juglans", "Juglans Bold")
 # source file
 srcfont_incosolata = "../SourceTTF/Inconsolata-Regular.ttf"
 srcfont_incosolata_bold = "../SourceTTF/Inconsolata-Bold.ttf"
@@ -24,6 +24,8 @@ srcfont_dejavu = "../SourceTTF/DejaVuLGCSansMono.ttf"
 srcfont_dejavu_bold = "../SourceTTF/DejaVuLGCSansMono-Bold.ttf"
 srcfont_anonpro = "../SourceTTF/AnonymousProMinus.ttf"
 srcfont_anonpro_bold = "../SourceTTF/AnonymousProMinusB.ttf"
+srcfont_nerdfonts = "../SourceTTF/NerdFonts-without-pomicon-Regular.ttf"
+srcfont_powerline = "../SourceTTF/Powerline-Mod.ttf"
 
 
 # out file
@@ -80,16 +82,24 @@ fontforge.setPrefs('CopyTTFInstrs', 1)
 print("Juglans generator " + newfont_version)
 print("This script is for generating 'Juglans' font")
 
-if len(sys.argv) > 1 and sys.argv[1] == "bold":
-    print("Generate Juglans-Bold")
+if sys.argv[1] == "WindowsTerminal":
+    powerline_y = -210
+    powerline_h = 1.09
+elif sys.argv[1] == "iTerm2":
+    powerline_y = -175
+    powerline_h = 1.065
+else:
+    powerline_y = -200
+    powerline_y = 1.0
+
+print(f"Generate Juglans {sys.argv[2]} for {sys.argv[1]}")
+if sys.argv[2] == "Bold":
     newfont_name = newfont_name_bold
     newfont_weight = newfont_weight_bold
     srcfont_incosolata = srcfont_incosolata_bold
     srcfont_GenShin = srcfont_GenShin_bold
     srcfont_anonpro = srcfont_anonpro_bold
     panose_base = panose_base_bold
-else:
-    print("Generate Juglans-Normal")
 
 if os.path.exists(srcfont_incosolata) == False:
     print("Error: " + srcfont_incosolata + " not found")
@@ -101,6 +111,39 @@ if os.path.exists(srcfont_GenShin) == False:
 ########################################
 # define function
 ########################################
+
+
+class Matrix:
+    def __init__(self):
+        self.ps_mat = None
+
+    def move(self, x, y):
+        mat = psMat.translate(x, y)
+        self._compose(mat)
+        return self
+    
+    def scale(self, x, y=None):
+        if y is None:
+            y = x
+        mat = psMat.scale(x, y)
+        self._compose(mat)
+        return self
+    
+    def to_ff(self):
+        return self.ps_mat
+    
+    def _compose(self, mat):
+        if self.ps_mat is None:
+            self.ps_mat = mat
+            return
+        self.ps_mat = psMat.compose(self.ps_mat, mat)
+    
+    
+
+def composeChain(mat):
+    return psMat.compose(self, chain)
+
+
 def matRescale(origin_x, origin_y, scale_x, scale_y):
     return psMat.compose(
         psMat.translate(-origin_x, -origin_y), psMat.compose(
@@ -286,7 +329,6 @@ def setFontProp(font, fontInfo):
 
     font.upos = 45
 
-
 charASCII = rng(0x0021, 0x007E)
 charZHKana = list(u"ぁあぃいぅうぇえぉおかがきぎくぐけげこごさざしじすずせぜそぞただちぢっつづてでとどなにぬねのはばぱひびぴふぶぷへべぺほぼぽまみむめもゃやゅゆょよらりるれろゎわゐゑをん"),
 charZKKana = list(u"ァアィイゥウェエォオカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャヤュユョヨラリルレロヮワヰヱヲンヴヵヶ"),
@@ -297,7 +339,6 @@ charZEisu = list(u"０１２３４５６７８９ＡＢＣＤＥＦＧＨＩＪ�
 # modified Inconsolata
 ########################################
 
-print()
 print("Open " + srcfont_incosolata)
 fIn = fontforge.open(srcfont_incosolata)
 
@@ -331,7 +372,7 @@ fIn.close()
 # modify Anonymous Pro Minus
 ########################################
 
-print("\nOpen " + srcfont_anonpro)
+print("Open " + srcfont_anonpro)
 anon_font = fontforge.open(srcfont_anonpro)
 
 # modify
@@ -362,10 +403,65 @@ anon_font.generate("../Work/modAnon.ttf", '', generate_flags)
 anon_font.close()
 
 ########################################
+# modify Powerline
+########################################
+
+print("Open " + srcfont_powerline)
+powerline = fontforge.open(srcfont_powerline)
+
+# modify
+print("modify")
+
+# modify em
+powerline.em = newfont_em
+powerline.ascent = newfont_ascent
+powerline.descent = newfont_descent
+
+# move
+for glyph in powerline.glyphs():
+    mat = (Matrix()
+        .move(0, 200)
+        .scale(1.0, powerline_h)
+        .move(0, powerline_y)
+        .to_ff())
+    glyph.transform(mat)
+
+powerline.selection.all()
+powerline.round()
+
+powerline.generate("../Work/modPower.ttf", '', generate_flags)
+powerline.close()
+
+########################################
+# modify Nerd Fonts
+########################################
+
+print("Open " + srcfont_nerdfonts)
+nerd_font = fontforge.open(srcfont_nerdfonts)
+
+# modify
+print("modify")
+
+# modify em
+nerd_font.em = newfont_em
+nerd_font.ascent = newfont_ascent
+nerd_font.descent = newfont_descent
+
+# move
+for glyph in nerd_font.glyphs():
+    glyph.transform(psMat.translate(0, 60))
+
+nerd_font.selection.all()
+nerd_font.round()
+
+nerd_font.generate("../Work/modNerd.ttf", '', generate_flags)
+nerd_font.close()
+
+########################################
 # modify DejaVu LGC
 ########################################
 
-print("\nOpen " + srcfont_dejavu)
+print("Open " + srcfont_dejavu)
 de_font = fontforge.open(srcfont_dejavu)
 
 # modify
@@ -399,7 +495,6 @@ de_font.close()
 # modified GenShin
 ########################################
 
-print()
 print("Open " + srcfont_GenShin)
 fGs = fontforge.open(srcfont_GenShin)
 
@@ -442,11 +537,7 @@ fGs.close()
 # create Juglans
 ########################################
 ju_font = fontforge.open("../Work/modIncosolata.ttf")
-de_font = fontforge.open("../Work/modDejaVu.ttf")
-ge_font = fontforge.open("../Work/modGenShin.ttf")
-an_font = fontforge.open("../Work/modAnon.ttf")
 
-print()
 print("Build " + newfont_name[0])
 
 # pre-process
@@ -456,9 +547,16 @@ setFontProp(ju_font, newfont_name)
 print("merge Anonymous Pro")
 ju_font.mergeFonts("../Work/modAnon.ttf")
 
+# merge Powerline
+print("merge Powerline")
+ju_font.mergeFonts("../Work/modPower.ttf")
+
+# merge Nerd Fonts
+print("merge Nerd Fonts")
+ju_font.mergeFonts("../Work/modNerd.ttf")
+
 # merge DejaVu
 print("merge DejaVu")
-# マージ
 ju_font.mergeFonts("../Work/modDejaVu.ttf")
 
 # merge GenShin
