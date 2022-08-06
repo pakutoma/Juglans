@@ -24,7 +24,7 @@ srcfont_dejavu = "../SourceTTF/DejaVuLGCSansMono.ttf"
 srcfont_dejavu_bold = "../SourceTTF/DejaVuLGCSansMono-Bold.ttf"
 srcfont_anonpro = "../SourceTTF/AnonymousProMinus.ttf"
 srcfont_anonpro_bold = "../SourceTTF/AnonymousProMinusB.ttf"
-srcfont_nerdfont = "../SourceTTF/NerdFont-without-pomicon-Regular.ttf"
+srcfont_nerdfonts = "../SourceTTF/NerdFonts-without-pomicon-Regular.ttf"
 srcfont_powerline = "../SourceTTF/Powerline-Mod.ttf"
 
 
@@ -339,7 +339,6 @@ charZEisu = list(u"０１２３４５６７８９ＡＢＣＤＥＦＧＨＩＪ�
 # modified Inconsolata
 ########################################
 
-print()
 print("Open " + srcfont_incosolata)
 fIn = fontforge.open(srcfont_incosolata)
 
@@ -373,7 +372,7 @@ fIn.close()
 # modify Anonymous Pro Minus
 ########################################
 
-print("\nOpen " + srcfont_anonpro)
+print("Open " + srcfont_anonpro)
 anon_font = fontforge.open(srcfont_anonpro)
 
 # modify
@@ -407,7 +406,7 @@ anon_font.close()
 # modify Powerline
 ########################################
 
-print("\nOpen " + srcfont_powerline)
+print("Open " + srcfont_powerline)
 powerline = fontforge.open(srcfont_powerline)
 
 # modify
@@ -434,11 +433,11 @@ powerline.generate("../Work/modPower.ttf", '', generate_flags)
 powerline.close()
 
 ########################################
-# modify NerdFont
+# modify Nerd Fonts
 ########################################
 
-print("\nOpen " + srcfont_nerdfont)
-nerd_font = fontforge.open(srcfont_nerdfont)
+print("Open " + srcfont_nerdfonts)
+nerd_font = fontforge.open(srcfont_nerdfonts)
 
 # modify
 print("modify")
@@ -462,7 +461,7 @@ nerd_font.close()
 # modify DejaVu LGC
 ########################################
 
-print("\nOpen " + srcfont_dejavu)
+print("Open " + srcfont_dejavu)
 de_font = fontforge.open(srcfont_dejavu)
 
 # modify
@@ -496,7 +495,6 @@ de_font.close()
 # modified GenShin
 ########################################
 
-print()
 print("Open " + srcfont_GenShin)
 fGs = fontforge.open(srcfont_GenShin)
 
@@ -540,7 +538,6 @@ fGs.close()
 ########################################
 ju_font = fontforge.open("../Work/modIncosolata.ttf")
 
-print()
 print("Build " + newfont_name[0])
 
 # pre-process
@@ -554,8 +551,8 @@ ju_font.mergeFonts("../Work/modAnon.ttf")
 print("merge Powerline")
 ju_font.mergeFonts("../Work/modPower.ttf")
 
-# merge NerdFont
-print("merge NerdFont")
+# merge Nerd Fonts
+print("merge Nerd Fonts")
 ju_font.mergeFonts("../Work/modNerd.ttf")
 
 # merge DejaVu

@@ -38,3 +38,4 @@ done
 echo 圧縮ファイルの作成
 find ../product -name '*.ttf' -printf "%f\0" | xargs -0 tar -Jcf ../product/Juglans.tar.xz -C ../ LICENSE README.md サードパーティーライセンス.txt -C product
 zip -q ../product/Juglans.zip -j ../product/*.ttf ../LICENSE ../README.md ../サードパーティーライセンス.txt
+echo 完了
