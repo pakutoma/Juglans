@@ -9,7 +9,7 @@
 
 
 # version
-newfont_version = "2.004.20220804"
+newfont_version = "2.004.20220807"
 newfont_sfntRevision = 0x00010000
 
 # set font name
