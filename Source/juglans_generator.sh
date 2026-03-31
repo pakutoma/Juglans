@@ -1,6 +1,6 @@
 #!/bin/sh
 echo フォント生成
-mkdir ../Work
+mkdir -p ../Work ../product
 
 terminals=(
 	"WindowsTerminal"
@@ -15,23 +15,13 @@ weights=(
 for terminal in "${terminals[@]}" ; do
 	for weight in "${weights[@]}" ; do
 		echo "${terminal} ${weight} フォント生成"
-		fontforge -lang=py -script juglans_generator.py $terminal $weight 2> /dev/null
+		python3 juglans_generator.py $terminal $weight
 
-		src_ttf="../SourceTTF/Inconsolata-${weight}.ttf"
-		work_ttf="../Work/Juglans-${weight}-for-${terminal}.ttf"
-		src_ttx="../Work/Inconsolata-${weight}.ttx"
-		work_ttx="../Work/Juglans-${weight}-for-${terminal}.ttx"
+		src_ttf="../Work/Juglans-${weight}-for-${terminal}.ttf"
 		dst_ttf="../product/Juglans-${weight}-for-${terminal}.ttf"
-		
-		echo xAvgCharWidthの書き換え
-		ttx -f -t 'OS/2' -d ../Work $work_ttf
-		ttx -f -t 'OS/2' -d ../Work $src_ttf
-		xAvgCharWidth=$(grep xAvgCharWidth $src_ttx | sed -e 's/.*value="\([0-9]*\)".*/\1/')
-		sed -i -e "s/^\(.*<xAvgCharWidth value=\"\)[0-9]*\(.*\)/\1$xAvgCharWidth\2/" $work_ttx
-		ttx -f -m $work_ttf $work_ttx
 
 		# productにコピー
-		cp $work_ttf $dst_ttf
+		cp $src_ttf $dst_ttf
 	done
 done
 
