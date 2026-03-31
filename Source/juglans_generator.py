@@ -24,7 +24,8 @@ srcfont_dejavu = "../SourceTTF/DejaVuLGCSansMono.ttf"
 srcfont_dejavu_bold = "../SourceTTF/DejaVuLGCSansMono-Bold.ttf"
 srcfont_anonpro = "../SourceTTF/AnonymousProMinus.ttf"
 srcfont_anonpro_bold = "../SourceTTF/AnonymousProMinusB.ttf"
-srcfont_nerdfonts = "../SourceTTF/NerdFonts-without-pomicon-Regular.ttf"
+srcfont_nerdfonts = "../SourceTTF/InconsolataNerdFont-Regular.ttf"
+srcfont_nerdfonts_bold = "../SourceTTF/InconsolataNerdFont-Bold.ttf"
 srcfont_powerline = "../SourceTTF/Powerline-Mod.ttf"
 
 
@@ -99,6 +100,7 @@ if sys.argv[2] == "Bold":
     srcfont_incosolata = srcfont_incosolata_bold
     srcfont_GenShin = srcfont_GenShin_bold
     srcfont_anonpro = srcfont_anonpro_bold
+    srcfont_nerdfonts = srcfont_nerdfonts_bold
     panose_base = panose_base_bold
 
 if os.path.exists(srcfont_incosolata) == False:
