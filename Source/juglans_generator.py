@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+# /// script
+# requires-python = ">=3.10"
+# dependencies = ["fonttools"]
+# ///
 # -*- coding: utf-8 -*-
 
 #
@@ -637,15 +641,8 @@ def set_font_properties(font, font_info, weight, panose, unicode_ranges, code_pa
 # main
 ########################################
 
-def main():
-    if len(sys.argv) < 3:
-        print("Usage: juglans_generator.py <terminal> <weight>")
-        print("  terminal: WindowsTerminal, iTerm2")
-        print("  weight: Regular, Bold")
-        sys.exit(1)
-
-    terminal = sys.argv[1]
-    weight = sys.argv[2]
+def generate_one(terminal, weight):
+    """Generate a single font variant."""
     is_bold = weight == "Bold"
 
     print(f"Juglans generator {newfont_version}")
@@ -728,6 +725,46 @@ def main():
     genshin_font.close()
 
     print("Done!")
+
+
+def main():
+    if len(sys.argv) >= 3:
+        generate_one(sys.argv[1], sys.argv[2])
+        return
+
+    import shutil
+    import subprocess
+
+    print("フォント生成")
+    os.makedirs("../Work", exist_ok=True)
+    os.makedirs("../product", exist_ok=True)
+
+    terminals = ["WindowsTerminal", "iTerm2"]
+    weights = ["Regular", "Bold"]
+
+    for terminal in terminals:
+        for weight in weights:
+            print(f"\n{'='*50}")
+            print(f"{terminal} {weight} フォント生成")
+            print(f"{'='*50}")
+            generate_one(terminal, weight)
+            shutil.copy2(f"../Work/Juglans-{weight}-for-{terminal}.ttf",
+                         f"../product/Juglans-{weight}-for-{terminal}.ttf")
+
+    print("\n圧縮ファイルの作成")
+    ttf_files = [f"Juglans-{w}-for-{t}.ttf" for t in terminals for w in weights]
+    subprocess.run([
+        "tar", "-Jcf", "../product/Juglans.tar.xz",
+        "-C", "..", "LICENSE", "README.md", "サードパーティーライセンス.txt",
+        "-C", "product",
+    ] + ttf_files, check=True)
+    subprocess.run(
+        ["zip", "-q", "../product/Juglans.zip", "-j"]
+        + [f"../product/{f}" for f in ttf_files]
+        + ["../LICENSE", "../README.md", "../サードパーティーライセンス.txt"],
+        check=True,
+    )
+    print("完了")
 
 
 if __name__ == "__main__":
